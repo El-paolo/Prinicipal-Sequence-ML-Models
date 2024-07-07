@@ -1,5 +1,17 @@
 import pandas as pd
 from dash import Dash, Input, Output, dcc, html
+import dash
+from dash import Dash, html, Input, Output, ctx, callback
+import dash_bootstrap_components as dbc
+from dash.dependencies import Input, Output, State
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+import plotly.express as px
+import plotly.graph_objects as go
+#load of packages
 
 data = (
     pd.read_csv("avocado.csv")
@@ -15,6 +27,11 @@ avocado_types = data["type"].sort_values().unique()
 data2 = (
     pd.read_csv("6classcsv.csv")
 )
+#plot of stars-default
+px.scatter(data2[data2['Star type'] == 5], x='Temperature (K)', y='Luminosity(L/Lo)', color='Star type',
+                     title='Clasificación de Estrellas en la Secuencia Principal',
+                     labels={'Temperature (K)': 'Temperatura (K)', 'Luminosity(L/Lo)': 'Luminosidad (L/Lo)'},
+                     hover_data=['Radius(R/Ro)', 'Absolute magnitude(Mv)', 'Star color', 'Spectral Class'])
 
 
 # parametros
@@ -45,7 +62,7 @@ app.layout = html.Div(
                 html.H1(
                     children="Principal Stars Sequences", className="header-title"
                 ),
-                                      html.Div(
+                                html.Div(
     children=[
         html.P(
             children=(
@@ -186,7 +203,7 @@ app.layout = html.Div(
     Output("volume-chart", "figure"),
     #Output("")
     Input("temperature-filter", "value"),
-    Input("region-filter", "value"),
+    Input("region-filter", "value"),g
     Input("type-filter", "value"),
     Input("date-range", "start_date"),
     Input("date-range", "end_date"),

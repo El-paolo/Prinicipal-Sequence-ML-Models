@@ -166,7 +166,15 @@ def render_content(tab):
                     html.H3("Hertzsprung-Russell Diagram", className='text-center my-4'),
                     dcc.Graph(id='star-scatter', figure={})
                 ], width=8)
-            ], className='mt-4')
+            ], className='mt-4'),
+            dbc.Col([html.H1("Star Data Analysis"),
+        dbc.Row([
+                dbc.Col([
+                dcc.Graph(id='Radius-Luminosity-graph', figure={})
+                ])
+    ])
+    ]),
+            
         ], className="container-fluid container-background shadow")
     elif tab == 'tab-2':
         return dbc.Container([
@@ -193,8 +201,10 @@ def render_content(tab):
         ])
 
 @app.callback(
+
     Output('output-class', 'children'),
     Output('star-scatter', 'figure'),
+    Output('Radius-Luminosity-graph', 'figure'),
     Input('classify-button', 'n_clicks'),
     State('input-temp', 'value'),
     State('input-lum', 'value'),
@@ -228,6 +238,30 @@ def classify_star(n_clicks, temp, lum, radius, mag):
         'ay': -40
     }
 
+    RadiusLuminosityAnnotation = {
+        'x': radius,
+        'y': log_lum,
+        'xref': 'x',
+        'yref': 'y',
+        'text': f" Star Type of Consulted Star: {star_type}",
+        'showarrow': True,
+        'arrowhead': 2,
+        'ax': 0,
+        'ay': -40
+    }
+
+
+    #Radius Luminosity graph
+
+    plot = px.scatter(data, x='Radius(R/Ro)', y='Luminosity(L/Lo)', color='Star type',
+                     title=" Radius-Luminosity Relation",
+                     labels={'Radius(R/Ro)': 'Radio (R/Ro)', 'Luminosity(L/Lo)': 'Luminosidad (L/Lo)'},
+                     hover_data=['Temperature (K)', 'Absolute magnitude(Mv)', 'Star color', 'Spectral Class'])
+    plot.update_layout(transition_duration=500,
+        annotations=[ RadiusLuminosityAnnotation],
+        xaxis_autorange='reversed',  # Invertir el eje x
+        yaxis_type='log'  # Escala logarítmica para el eje y
+    )
     # Actualizar el gráfico de dispersión
     fig = px.scatter(data, x='Temperature (K)', y='Luminosity(L/Lo)', color='Star type',
                      title='Star Classification on The Principal Sequence',
@@ -240,7 +274,10 @@ def classify_star(n_clicks, temp, lum, radius, mag):
         yaxis_type='log'  # Escala logarítmica para el eje y
     )
 
-    return dbc.Alert(f" Star Type Predicted: {star_type}", color='info'), fig
+    return dbc.Alert(f" Star Type Predicted: {star_type}", color='info'), fig, plot
+
+
+
 
 
 # Índice de tipos de estrellas

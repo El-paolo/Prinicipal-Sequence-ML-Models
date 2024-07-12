@@ -9,6 +9,8 @@ from sklearn.metrics import accuracy_score
 import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
+from sklearn.metrics import accuracy_score, confusion_matrix
+import plotly.figure_factory as ff
 
 # Load data
 data = pd.read_csv("6classcsv.csv")
@@ -45,6 +47,16 @@ y_pred_train = svm_model.predict(X_train_scaled)
 y_pred_test = svm_model.predict(X_test_scaled)
 train_accuracy = accuracy_score(y_train, y_pred_train)
 test_accuracy = accuracy_score(y_test, y_pred_test)
+
+#confusion maxtrix
+conf_matrix = confusion_matrix(y_test, y_pred_test)
+z = conf_matrix
+x = ['Type 0', 'Type 1', 'Type 2', 'Type 3', 'Type 4', 'Type 5']  # Predicted classes
+y = ['Type 0', 'Type 1', 'Type 2', 'Type 3', 'Type 4', 'Type 5']  # Actual classes
+
+conf_matrix_fig = ff.create_annotated_heatmap(z, x=x, y=y, colorscale='Viridis')
+conf_matrix_fig.update_layout(title='Confusion Matrix', xaxis_title='Predicted', yaxis_title='Actual')
+
 
 external_stylesheets = [
     {
@@ -194,7 +206,16 @@ def render_content(tab):
                         figure=go.Figure(
                             data=[go.Bar(x=['Train Accuracy', 'Test Accuracy'], y=[train_accuracy, test_accuracy], text=[f'{train_accuracy:.2%}', f'{test_accuracy:.2%}'], textposition='auto')],
                             layout_title_text='Model accuracy'
+                            
                         )
+                    )
+                ], width=12)
+            ], className='mt-4'),
+                        dbc.Row([
+                dbc.Col([
+                    dcc.Graph(
+                        id='confusion-Matrix',
+                        figure=conf_matrix_fig
                     )
                 ], width=12)
             ], className='mt-4')

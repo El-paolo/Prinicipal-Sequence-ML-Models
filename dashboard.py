@@ -156,18 +156,18 @@ def render_content(tab):
                             html.Label("Absolute Magnitude (Mv) [-10 to +15]:"),
                             dcc.Input(id='input-mag', type='number', value=5, step=0.1, min=-10.0,max=15.0,className='form-control mb-2'),
                             html.Br(),
-                            dbc.Button("Clasiffy", id='classify-button', color='primary', className='mt-2'),
+                            dbc.Button("Classify", id='classify-button', color='primary', className='mt-2'),
                             html.Hr(),
                             html.Div(id='output-class', className='text-center mt-4')
                         ]),
                     )
                 ], width=4),
                 dbc.Col([
-                    html.H3("Stars Scatter Plot", className='text-center my-4'),
+                    html.H3("Hertzsprung-Russell Diagram", className='text-center my-4'),
                     dcc.Graph(id='star-scatter', figure={})
                 ], width=8)
             ], className='mt-4')
-        ])
+        ], className="container-fluid container-background shadow")
     elif tab == 'tab-2':
         return dbc.Container([
             dbc.Row([

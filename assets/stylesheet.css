@@ -2,7 +2,12 @@
 body {
     font-family: "Lato", sans-serif;
     margin: 0;
-    background-color: #F7F7F7;
+
+    background-color: rgb(34, 34, 34);
+    background-image: radial-gradient(white 1px, transparent 1px);
+    background-size: 20px 20px;
+    animation: moveBackground 10s linear infinite;
+    color: white;
 }
 
 .header-emoji {
@@ -75,6 +80,14 @@ body {
     margin: -80px auto 0 auto;
     background-color: #FFFFFF;
     box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.18);
+}
+
+.container-background{
+    background-color: rgb(34, 34, 34);
+    background-image: radial-gradient(white 1px, transparent 1px);
+    background-size: 20px 20px;
+    animation: moveBackground 10s linear infinite;
+    color: white;
 }
 
 .Select-control {
